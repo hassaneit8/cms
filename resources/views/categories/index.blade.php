@@ -30,21 +30,26 @@
                 </table>
                 <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                        <form action="" method="POST" id="DeleteForm">
+                            @csrf
+                            @method('delete')
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Delete Category</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="text-center text-bold"> Are You Sure You Want To Delete This Category !!</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger"> Delete</button>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                ...
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
@@ -53,8 +58,10 @@
 @section('scripts')
     <script>
         function handleDelete(id) {
-            console.log('deleting.',id)
-            $('#deleteModel').model('show')
+            var form=document.getElementById('DeleteForm')
+            form.action='/categories/'+ id
+            // console.log('deleting.', form)  //>>>>>>for tracing in inspect
+            $('#deleteModel').modal('show')
         }
     </script>
 @endsection

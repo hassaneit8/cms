@@ -51,7 +51,7 @@ class CategoriesController extends Controller
 
         //then add fillable in category model     protected $fillable=['name'];
 
-      return  redirect()->route('categories.index')->with('message', 'success|Record added');
+      return  redirect()->route('categories.index')->with('message', 'success|Category added');
     }
 
     /**
@@ -92,7 +92,7 @@ class CategoriesController extends Controller
 //        $category->save();
 //
 
-        return redirect()->route('categories.index')->with('message', 'success|Record updated');
+        return redirect()->route('categories.index')->with('message', 'success|Category updated');
     }
 
     /**
@@ -101,8 +101,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return redirect()->route('categories.index')->with('message', 'success|Category deleted');
     }
 }
