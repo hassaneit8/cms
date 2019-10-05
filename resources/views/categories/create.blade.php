@@ -6,23 +6,27 @@
 
         </div>
         <div class="card-body">
-            <form action="{{ isset($CategoryFromEditFunc) ? route('categories.update',$CategoryFromEditFunc->id) : route('categories.store') }}" method="POST">
+            <form
+                action="{{ isset($CategoryFromEditFunc) ? route('categories.update',$CategoryFromEditFunc->id) : route('categories.store') }}"
+                method="POST">
                 @csrf
                 @if(isset($CategoryFromEditFunc))
-                @method('PUT')
+                    @method('PUT')
                 @endif
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" class="form-control " name="name" value="{{ isset($CategoryFromEditFunc) ? $CategoryFromEditFunc->name : '' }}">
+                    <input type="text" id="name" class="form-control " name="name"
+                           value="{{ isset($CategoryFromEditFunc) ? $CategoryFromEditFunc->name : '' }}">
 
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
-            <div class="form-group">
-                <input type="submit" class="btn btn-success" value="{{ isset($CategoryFromEditFunc) ? 'Update Category' : 'Add Category' }}">
-            </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success"
+                           value="{{ isset($CategoryFromEditFunc) ? 'Update Category' : 'Add Category' }}">
+                </div>
             </form>
         </div>
     </div>
