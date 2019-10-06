@@ -15,9 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-
-
-        return view('posts.index')->with('posts',Post::all());
+        return view('posts.index')->with('posts', Post::all());
     }
 
     /**
@@ -34,25 +32,25 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePostRequest $request)
     {
         $image = $request->image->store('posts');
         Post::create([
-            'title'=>$request->title,
-            'description'=>$request->description,
-            'content'=>$request->content,
+            'title' => $request->title,
+            'description' => $request->description,
+            'content' => $request->contentt,
             'image' => $image,
         ]);
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('message', 'success|Post added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -63,7 +61,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -74,8 +72,8 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -86,11 +84,19 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+//        dd($post);
+        $post->delete();
+        return redirect()->route('posts.index')->with('message', 'success|Post Transfer to Trash');
+    }
+    public function trashed(){
+
+        $trashed=Post::withTrashed()->get();
+        dd($trashed);
+        return view('posts.index')->with('posts',$trashed);# the same to ----->>>>with('posts',$trashed);  >> ->withPosts($trashed);
     }
 }

@@ -8,7 +8,7 @@
                 <div class="form-group">
                     <label for="title"> Title</label>
                     <input type="text" name="title" class="form-control" id="title">
-                    @error('name')
+                    @error('title')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -16,15 +16,15 @@
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea type="text" name="description" class="form-control"id="description"></textarea>
-                    @error('name')
+                    @error('description')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea type="text" name="content"class="form-control"id="content"></textarea>
-                    @error('name')
+                    <label for="contentt">Content</label>
+                    <textarea type="text" name="contentt"class="form-control"id="contentt"></textarea>
+                    @error('contentt')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label for="published_at">Published_at</label>
                     <input type="date" name="published_at"class="form-control"id="published_at">
-                    @error('name')
+                    @error('published_at')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label for="image">Image</label>
                     <input type="file" name="image"class="form-control" id="image">
-                    @error('name')
+                    @error('image')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>

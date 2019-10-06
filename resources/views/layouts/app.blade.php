@@ -94,6 +94,12 @@
                             </li>
 
                         </ul>
+                        <ul class="list-group mt-5">
+                            <li class="list-group-item">
+                                <a href="{{ route('trashed.index') }}" class="ref">Trashd Posts</a>
+                            </li>
+
+                        </ul>
 
                     </div>
                     <div class="col-md-8">
