@@ -20,4 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('categories','CategoriesController');
 Route::resource('posts','PostController');
-Route::get('trashed','PostController@trashed')->name('trashed.index');
+Route::get('trashed','PostController@trash')->name('trashed.index');

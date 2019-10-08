@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\posts\StorePostRequest;
+use App\Http\Requests\posts\UpdatePostRequest;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -43,6 +45,7 @@ class PostController extends Controller
             'description' => $request->description,
             'content' => $request->contentt,
             'image' => $image,
+            'published_at' => $request->published_at
         ]);
         return redirect()->route('posts.index')->with('message', 'success|Post added');
     }
@@ -64,9 +67,9 @@ class PostController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.create')->with('post',$post);
     }
 
     /**
@@ -76,9 +79,19 @@ class PostController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+//        dd($request->title);
+        $data=$request->only(['title','description','published_at','content']);
+        if ($request->hasFile('image')){
+            $image=$request->image->store('posts');
+            Storage::delete($post->image);
+            $data['image']=$image ;
+        }
+        $post->update($data);
+
+        return redirect()->route('posts.index')->with('message', 'success|Post updated successfully');
+
     }
 
     /**
@@ -87,16 +100,25 @@ class PostController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-//        dd($post);
-        $post->delete();
-        return redirect()->route('posts.index')->with('message', 'success|Post Transfer to Trash');
-    }
-    public function trashed(){
+        $post = Post::withTrashed()->where('id',$id)->firstOrFail();
+        if($post->trashed()){
+            Storage::delete($post->image);  #for deleting the image
+            $post->forceDelete();
+            return redirect()->route('trashed.index')->with('message', 'success|Post Deleted');
 
-        $trashed=Post::withTrashed()->get();
-        dd($trashed);
+        }else{
+
+            $post->delete();
+            return redirect()->route('posts.index')->with('message', 'success|Post Transfer to Trash');
+
+        }
+
+    }
+    public function trash(){
+
+        $trashed=Post::onlyTrashed()->get();
         return view('posts.index')->with('posts',$trashed);# the same to ----->>>>with('posts',$trashed);  >> ->withPosts($trashed);
     }
 }
