@@ -13,6 +13,7 @@
                     <thead>
                     <th>image</th>
                     <th>title</th>
+                    <th>category</th>
                     <th>Action</th>
                     </thead>
                     <tbody>
@@ -27,8 +28,20 @@
                                 {{ $post->title}}
                             </td>
                             <td>
-                                @if(!$post->trashed())
-                                    <a href=" {{ route('posts.edit',$post->id) }}" class="btn btn-success btn-sm"> Edit</a>
+                                <a href="{{ route('categories.edit',$post->category->id) }}">{{ $post->category->name }}</a>
+
+                            </td>
+                            <td>
+                                @if($post->trashed())
+                                    <form action=" {{ route('post.restore',$post->id) }}" method="POST" class="d-inline-block">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <button type="submit" class="btn btn-success btn-sm"> Restore </button>
+                                    </form>
+                                @else
+                                    <a href=" {{ route('posts.edit',$post->id) }}" class="btn btn-success btn-sm"> Edit  </a>
+
                                 @endif
                                 <form action="{{ route('posts.destroy',$post->id)}}" method="POST"
                                       class="d-inline-block">

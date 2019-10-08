@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Http\Requests\posts\StorePostRequest;
 use App\Http\Requests\posts\UpdatePostRequest;
 use App\Post;
@@ -27,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('posts.create')->with('categories',Category::all());
 
     }
 
@@ -45,7 +46,8 @@ class PostController extends Controller
             'description' => $request->description,
             'content' => $request->contentt,
             'image' => $image,
-            'published_at' => $request->published_at
+            'published_at' => $request->published_at,
+            'category_id'=>$request->category,
         ]);
         return redirect()->route('posts.index')->with('message', 'success|Post added');
     }
@@ -69,7 +71,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.create')->with('post',$post);
+        $categories = Category::all();
+        return view('posts.create')->with([
+            'post'=> $post,
+            'categories'=>$categories
+            ]);
     }
 
     /**
@@ -82,11 +88,11 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
 //        dd($request->title);
-        $data=$request->only(['title','description','published_at','content']);
-        if ($request->hasFile('image')){
-            $image=$request->image->store('posts');
+        $data = $request->only(['title', 'description', 'published_at', 'content','category_id']);
+        if ($request->hasFile('image')) {
+            $image = $request->image->store('posts');
             Storage::delete($post->image);
-            $data['image']=$image ;
+            $data['image'] = $image;
         }
         $post->update($data);
 
@@ -100,15 +106,16 @@ class PostController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($postID)
     {
-        $post = Post::withTrashed()->where('id',$id)->firstOrFail();
-        if($post->trashed()){
-            Storage::delete($post->image);  #for deleting the image
+        $post = Post::withTrashed()->where('id', $postID )->firstOrFail();
+        if ($post->trashed()) {
+//            Storage::delete($post->image);  #for deleting the image
+            $post->deleteImage();
             $post->forceDelete();
             return redirect()->route('trashed.index')->with('message', 'success|Post Deleted');
 
-        }else{
+        } else {
 
             $post->delete();
             return redirect()->route('posts.index')->with('message', 'success|Post Transfer to Trash');
@@ -116,9 +123,22 @@ class PostController extends Controller
         }
 
     }
-    public function trash(){
 
-        $trashed=Post::onlyTrashed()->get();
-        return view('posts.index')->with('posts',$trashed);# the same to ----->>>>with('posts',$trashed);  >> ->withPosts($trashed);
+    public function trash()
+    {
+
+        $trashed = Post::onlyTrashed()->get();
+        return view('posts.index')->with('posts', $trashed);# the same to ----->>>>with('posts',$trashed);  >> ->withPosts($trashed);
     }
+
+    public function restore($postID)
+    {
+        $post = Post::withTrashed()->where('id', $postID)->firstOrFail();
+        $post->restore();
+
+
+        return redirect()->back();
+    }
+
+
 }

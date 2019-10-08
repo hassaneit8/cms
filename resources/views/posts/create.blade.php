@@ -19,7 +19,6 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea type="text" name="description" class="form-control"
@@ -28,7 +27,6 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="form-group">
                     <label for="contentt">Content</label>
                     <input id="contentt" type="hidden" name="contentt" value="{{ isset($post) ? $post->content : '' }}">
@@ -37,11 +35,10 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="form-group">
                     <label for="published_at">Published_at</label>
                     <input type="text" class="form-control" name="published_at" id='published_at'
-                           value="{{ isset($post) ? $post->published_at : '' }}">
+                           value="{{ isset($post) ? $post->published_at : ""}}">
 
                     {{--                    <input type="text" name="published_at" class="form-control" id="published_at" value="{{ isset($post) ? $post->published_at : '' }}">--}}
                 </div>
@@ -57,7 +54,25 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                        @if(!isset($post))
+                            <option value="" disabled selected>-----</option>
+                        @endif
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}"
+                                    @if(isset($post))
+                                    @if($category->id==$post->category_id)
+                                    selected
+                                @endif
+                                @endif
+                            >
+                        {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">
                         {{ isset($post) ? 'update Post' : 'Add Post' }}
@@ -71,15 +86,12 @@
             <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
             <script>
                 flatpickr('#published_at', {
-
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
-
                 })
             </script>
         @endsection
         @section('css')
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.0/trix.css">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 @endsection
