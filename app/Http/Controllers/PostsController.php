@@ -6,16 +6,22 @@ use App\Category;
 use App\Http\Requests\posts\StorePostRequest;
 use App\Http\Requests\posts\UpdatePostRequest;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class PostController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('verfiyCategoryCount')->only(['create','store']);
+    }
+
     public function index()
     {
         return view('posts.index')->with('posts', Post::all());
@@ -28,7 +34,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create')->with('categories',Category::all());
+        return view('posts.create')->with('categories', Category::all())->with('tags',Tag::all());
 
     }
 
@@ -40,15 +46,19 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
+
         $image = $request->image->store('posts');
-        Post::create([
+       $post= Post::create([
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->contentt,
             'image' => $image,
             'published_at' => $request->published_at,
-            'category_id'=>$request->category,
+            'category_id' => $request->category_id
         ]);
+        if ($request->tags) {
+            $post->tags()->attach($request->tags);
+        }
         return redirect()->route('posts.index')->with('message', 'success|Post added');
     }
 
@@ -72,10 +82,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('posts.create')->with([
-            'post'=> $post,
-            'categories'=>$categories
-            ]);
+        return view('posts.create')->with('post',$post)->with('categories',$categories)->with('tags',Tag::all());
     }
 
     /**
@@ -87,15 +94,13 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-//        dd($request->title);
-        $data = $request->only(['title', 'description', 'published_at', 'content','category_id']);
+    $data = $request->all();#only(['title', 'description', 'published_at', 'content', 'category_id']);
         if ($request->hasFile('image')) {
             $image = $request->image->store('posts');
             Storage::delete($post->image);
             $data['image'] = $image;
         }
         $post->update($data);
-
         return redirect()->route('posts.index')->with('message', 'success|Post updated successfully');
 
     }
@@ -108,7 +113,7 @@ class PostController extends Controller
      */
     public function destroy($postID)
     {
-        $post = Post::withTrashed()->where('id', $postID )->firstOrFail();
+        $post = Post::withTrashed()->where('id', $postID)->firstOrFail();
         if ($post->trashed()) {
 //            Storage::delete($post->image);  #for deleting the image
             $post->deleteImage();

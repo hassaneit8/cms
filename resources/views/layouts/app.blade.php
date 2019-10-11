@@ -80,9 +80,6 @@
 
         @auth
             <div class="container">
-                @if(Session::has('message'))
-                    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
-                @endif
                 <div class="row">
                     <div class="col-md-4">
                         <ul class="list-group">
@@ -91,6 +88,9 @@
                             </li>
                             <li class="list-group-item">
                                 <a href="{{ route('categories.index') }}" class="ref">Category</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{ route('tags.index') }}" class="ref">Tags</a>
                             </li>
 
                         </ul>

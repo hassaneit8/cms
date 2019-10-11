@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Category;
 
-use App\Http\Requests\Categories\CreateCategoryRequest;
-use App\Http\Requests\Categories\UpdateCategoryRequest;
+use App\Http\Requests\Tags\CreateTagRequest;
+use App\Http\Requests\Tags\UpdateTagRequest;
+use App\Tag;
 use Illuminate\Http\Request;
 
-class CategoriesController extends Controller
+class TagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +18,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
-        return view('categories.index')->with('categories' ,$category);
+        $tag = Tag::all();
+        return view('tags.index')->with('tags' ,$tag);
     }
 
     /**
@@ -28,7 +29,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        return view('tags.create');
     }
 
     /**
@@ -37,12 +38,12 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateCategoryRequest $request)
+    public function store(CreateTagRequest $request)
     {
 
 
-       $category=new Category();
-       Category::create($request->all());
+        $tag=new Tag();
+        Tag::create($request->all());
 
 
 //        Category::create([
@@ -51,7 +52,7 @@ class CategoriesController extends Controller
 
         //then add fillable in category model     protected $fillable=['name'];
 
-      return  redirect()->route('categories.index')->with('info', 'success|Category added');
+        return  redirect()->route('tags.index')->with('success', 'success|TAg added');
     }
 
     /**
@@ -71,9 +72,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(Tag $tag)
     {
-        return view('categories.create')->with('CategoryFromEditFunc',$category);
+        return view('tags.create')->with('TagFromEditFunc',$tag);
     }
 
     /**
@@ -83,16 +84,16 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateTagRequest $request, Tag $tag)
     {
-        $category->update([
+        $tag->update([
             'name' => $request->name ,
         ]);
 //        $category->name=$request->name;
 //        $category->save();
 //
 
-        return redirect()->route('categories.index')->with('info', 'success|Category updated');
+        return redirect()->route('tags.index')->with('message', 'success|Tag updated');
     }
 
     /**
@@ -101,9 +102,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Tag $tag)
     {
-        $category->delete();
-        return redirect()->route('categories.index')->with('error', 'success|Category deleted');
+        $tag->delete();
+        return redirect()->route('tags.index')->with('message', 'success|Category deleted');
     }
 }

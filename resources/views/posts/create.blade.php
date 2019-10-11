@@ -1,5 +1,8 @@
 @extends('layouts.app')
+
 @section('content')
+    @include('partial.error')
+
     <div class="card card-default">
         <div class="card-header">
             {{ isset($post) ? 'update Post' : 'Create Post' }}
@@ -56,10 +59,7 @@
                 </div>
                 <div class="form-group">
                     <label for="category">Category</label>
-                    <select name="category" id="category" class="form-control">
-                        @if(!isset($post))
-                            <option value="" disabled selected>-----</option>
-                        @endif
+                    <select name="category_id" id="category_id" class="form-control">
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}"
                                     @if(isset($post))
@@ -67,12 +67,23 @@
                                     selected
                                 @endif
                                 @endif
-                            >
-                        {{ $category->name }}
+                            >{{ $category->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
+                <div class="form-group">
+                    @if($tags->count() > 0)
+                        <label for="tags">Tags</label>
+                        <select name="tags[]" id="tags"  class="form-control" multiple>
+                            @foreach($tags as $tag)
+                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
+                    @endif
+                </div>
+
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">
                         {{ isset($post) ? 'update Post' : 'Add Post' }}
