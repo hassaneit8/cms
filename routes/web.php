@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','WelcomeController@index')->name('welcome');
 
 Auth::routes();
 
@@ -22,7 +20,14 @@ Route::middleware(['auth'])->group(function (){
     Route::resource('categories','CategoriesController');
     Route::resource('posts','PostsController');
     Route::resource('tags','TagsController');
-    Route::get('trashed','PostController@trash')->name('trashed.index');
-    Route::put('restore/{post}','PostController@restore')->name('post.restore');
+    Route::get('trashed','PostsController@trash')->name('trashed.index');
+    Route::put('restore/{post}','PostsController@restore')->name('post.restore');
 
+});
+
+Route::middleware(['auth','admin'])->group(function (){
+    Route::get('users','UsersController@index')->name('users.index');
+    Route::get('users/profile','UsersController@edit')->name('users.edit-profile');
+    Route::put('users/profile','UsersController@update')->name('users.update-profile');
+    Route::post('users/{user}/makeAdmin','UsersController@makeAdmin')->name('users.makeAdmin');
 });

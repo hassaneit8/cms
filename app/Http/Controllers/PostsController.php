@@ -81,6 +81,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
+//        dd($post->tags->pluck('id')->toArray()); check if it return the ID's of array that tags seleclted
         $categories = Category::all();
         return view('posts.create')->with('post',$post)->with('categories',$categories)->with('tags',Tag::all());
     }
@@ -100,6 +101,10 @@ class PostsController extends Controller
             Storage::delete($post->image);
             $data['image'] = $image;
         }
+        if($request->tags){
+            $post->tags()->sync($request->tags);
+        }
+
         $post->update($data);
         return redirect()->route('posts.index')->with('message', 'success|Post updated successfully');
 
@@ -133,6 +138,7 @@ class PostsController extends Controller
     {
 
         $trashed = Post::onlyTrashed()->get();
+//        dd("xxxx");
         return view('posts.index')->with('posts', $trashed);# the same to ----->>>>with('posts',$trashed);  >> ->withPosts($trashed);
     }
 

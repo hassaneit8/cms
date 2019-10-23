@@ -27,6 +27,9 @@ class Post extends Model
     public function tags(){
         return $this->belongsToMany(Tag::class);
     }
+    public function hasTag($tagID){
+        return in_array($tagID,$this->tags->pluck('id')->toArray());
+    }
 
 }
 //<select name="category" id="category" class="form-control">

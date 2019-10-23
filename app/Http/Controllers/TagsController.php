@@ -74,7 +74,7 @@ class TagsController extends Controller
      */
     public function edit(Tag $tag)
     {
-        return view('tags.create')->with('TagFromEditFunc',$tag);
+        return view('tags.create')->with('tag',$tag);
     }
 
     /**
@@ -104,7 +104,11 @@ class TagsController extends Controller
      */
     public function destroy(Tag $tag)
     {
+        if ($tag->posts->count() > 0){
+            return redirect()->route('tags.index')->with('error', 'Tag Cannot be deleted becouse it assosicate with post');
+
+        }
         $tag->delete();
-        return redirect()->route('tags.index')->with('message', 'success|Category deleted');
+        return redirect()->route('tags.index')->with('success', 'success|Tag deleted');
     }
 }
