@@ -3,7 +3,7 @@
     @include('partial.error')
 
     <div class="d-flex justify-content-end mb-2">
-        <a href="" class="btn btn-success btn-sm"> Add User </a>
+        <a href="{{route('users.create-profile')}}" class="btn btn-success btn-sm"> Add User </a>
     </div>
     <div class="card card-default">
         <div class="card-header">
@@ -15,6 +15,7 @@
                     <thead>
                     <th>image</th>
                     <th>Name</th>
+                    <th>role</th>
                     <th>E-mail</th>
                     <th>Action</th>
                     </thead>
@@ -28,6 +29,9 @@
                                 {{ $user->name}}
                             </td>
                             <td>
+                                {{ $user->role}}
+                            </td>
+                            <td>
                                 {{ $user->email}}
                             </td>
                             <td>
@@ -38,6 +42,14 @@
 
                                     </form>
                                 @endif
+
+                                    @if($user->isAdmin())
+                                        <form action="{{ route('users.makeWriter',$user->id)}}" method="post">
+                                            @csrf
+                                            <button type="submit" class="btn btn-info btn-sm" > Make Writer </button>
+
+                                        </form>
+                                    @endif
                             </td>
                         </tr>
                     @endforeach

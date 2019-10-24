@@ -3,7 +3,9 @@
 use App\Category;
 use App\Post;
 use App\Tag;
+use App\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class PostTableSeeder extends Seeder
 {
@@ -14,41 +16,34 @@ class PostTableSeeder extends Seeder
      */
     public function run()
     {
-        $categor1 = Category::create([
-            'name' => 'News'
+        $categor1 = Category::create(['name' => 'News']);
+        $categor2 = Category::create(['name' => 'Marketing']);
+        $categor3 = Category::create(['name' => 'product']);
+        $categor4 = Category::create(['name' => 'Design']);
+
+        $tag1 = Tag::create(['name' => 'Progress']);
+        $tag2 = Tag::create(['name' => 'Customer']);
+        $tag3 = Tag::create(['name' => 'Record']);
+        $tag4 = Tag::create(['name' => 'Job']);
+
+
+        $auther1 =User::create([
+            'name'=>'Fady',
+            'email'=>'Fady@gmail.com',
+            'password'=>Hash::make('123456789')
         ]);
-        $categor2 = Category::create([
-            'name' => 'Marketing'
+        $auther2 =User::create([
+            'name'=>'Khalel',
+            'email'=>'Khalel@gmail.com',
+            'password'=>Hash::make('123456789')
         ]);
-        $categor3 = Category::create([
-            'name' => 'product'
-        ]);
-        $categor4 = Category::create([
-            'name' => 'Design'
-
-        ]);
-
-        $tag1 = Tag::create([
-            'name' => 'Progress'
-
-        ]);
-
-
-        $tag2 = Tag::create([
-            'name' => 'Customer'
-
-        ]);
-
-
-        $tag3 = Tag::create([
-            'name' => 'Record'
-
+        $auther3 =User::create([
+            'name'=>'Manar',
+            'email'=>'Manar@gmail.com',
+            'password'=>Hash::make('123456789')
         ]);
 
-        $tag4 = Tag::create([
-            'name' => 'Job'
 
-        ]);
 
 
         $post1 = Post::create([
@@ -56,37 +51,39 @@ class PostTableSeeder extends Seeder
             'description' => 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit',
             'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'image' => 'posts/1.jpg',
-            'category_id' => $categor1->id
+            'category_id' => $categor1->id,
+            'user_id'=>$auther3->id,
         ]);
-        $post2 = Post::create([
+//        $post2 = Post::create
+        $post2 =$auther1->posts()->create([
             'title' => 'Top 5 brilliant content marketing strategies',
             'description' => 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit',
             'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'image' => 'posts/2.jpg',
             'category_id' => $categor2->id
         ]);
-        $post3 = Post::create([
+        $post3 =$auther2->posts()->create([
             'title' => 'Best practices for minimalist design with example',
             'description' => 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit',
             'content' => 'Lorem Ipsum is simply dummy text of the printingindustry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'image' => 'posts/3.jpg',
             'category_id' => $categor3->id
         ]);
-        $post4 = Post::create([
+        $post4 = $auther1->posts()->create([
             'title' => 'Congratulate and thank to Maryam for joining our team',
             'description' => 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit',
             'content' => 'Lorem Ipsum is simply dummy text of the printingindustry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'image' => 'posts/4.jpg',
             'category_id' => $categor1->id
         ]);
-        $post5 = Post::create([
+        $post5 =$auther3->posts()->create([
             'title' => 'New published books to read by a product designer',
             'description' => 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit',
             'content' => 'Lorem Ipsum is simply dummy text of the printingindustry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             'image' => 'posts/5.jpg',
             'category_id' => $categor2->id
         ]);
-        $post6 = Post::create([
+        $post6 =$auther2->posts()->create([
             'title' => 'This is why it\'s time to ditch dress codes at work',
             'description' => 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit',
             'content' => 'Lorem Ipsum is simply dummy text of the printingindustry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',

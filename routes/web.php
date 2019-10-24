@@ -11,7 +11,11 @@
 |
 */
 
+
+use App\Http\Controllers\Blog\ShowPostController;
+
 Route::get('/','WelcomeController@index')->name('welcome');
+Route::get('blog/posts/{post}',[ShowPostController::class,'show'])->name('blog.show');
 
 Auth::routes();
 
@@ -22,12 +26,13 @@ Route::middleware(['auth'])->group(function (){
     Route::resource('tags','TagsController');
     Route::get('trashed','PostsController@trash')->name('trashed.index');
     Route::put('restore/{post}','PostsController@restore')->name('post.restore');
-
 });
-
 Route::middleware(['auth','admin'])->group(function (){
     Route::get('users','UsersController@index')->name('users.index');
+    Route::get('users/create','UsersController@create')->name('users.create-profile');
+    Route::post('users/store','UsersController@store')->name('users.store');
     Route::get('users/profile','UsersController@edit')->name('users.edit-profile');
     Route::put('users/profile','UsersController@update')->name('users.update-profile');
     Route::post('users/{user}/makeAdmin','UsersController@makeAdmin')->name('users.makeAdmin');
+    Route::post('users/{user}/makeWriter','UsersController@makeWriter')->name('users.makeWriter');
 });
