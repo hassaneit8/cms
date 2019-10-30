@@ -56,6 +56,10 @@
                     </tbody>
                 </table>
             </div>
+        <div class="align-self-center">
+
+            {{ $users->links() }}
+        </div>
 
         @else
             <h3 class="text-center"><p> There is no User yet </p></h3>

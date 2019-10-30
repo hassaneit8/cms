@@ -24,7 +24,7 @@ class PostsController extends Controller
 
     public function index()
     {
-        return view('posts.index')->with('posts', Post::all());
+        return view('posts.index')->with('posts', Post::paginate(4));
     }
 
     /**
@@ -138,7 +138,7 @@ class PostsController extends Controller
     public function trash()
     {
 
-        $trashed = Post::onlyTrashed()->get();
+        $trashed = Post::onlyTrashed()->paginate(5);
 //        dd("xxxx");
         return view('posts.index')->with('posts', $trashed);# the same to ----->>>>with('posts',$trashed);  >> ->withPosts($trashed);
     }

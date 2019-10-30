@@ -66,6 +66,8 @@
         @else
             <h3 class="text-center"><p> There is no post yet </p></h3>
         @endif
-
+        <div class="align-self-center">
+            {{$posts->links()}}
+        </div>
     </div>
 @endsection
