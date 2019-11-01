@@ -19,6 +19,7 @@ class Post extends Model
 
     ];
     use SoftDeletes;
+    protected $dates =['published_at'];
 
     public function deleteImage()
     {
@@ -44,15 +45,16 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopePublished($query){
+        return $query->where('published_at','<=',now());
+    }
+    public function scopeSearched($query){
+        $search = request()->query('search');
+        if (!$search){
+            return $query->published() ;
+        }
+
+        return $query->published()->where('title','LIKE',"%{$search}%");
+    }
 }
-//<select name="category" id="category" class="form-control">
-//@foreach($categories as $category)
-//                            <option value="{{ $category->id }}"
-//                            @if(isset($post))
-//    @if($category->id==$post->category_id)
-//    selected
-//                                  @endif
-//                                  @endif
-//                            ></option>
-//
-//@endforeach
